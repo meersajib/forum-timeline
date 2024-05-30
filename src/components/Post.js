@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { fetchCommentsForPost } from "../api"; // Adjust the path as needed
+import { fetchCommentsForPost } from "../api";
 import Comments from "./Comments";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle, faEnvelope } from "@fortawesome/free-solid-svg-icons";

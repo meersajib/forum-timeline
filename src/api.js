@@ -6,7 +6,8 @@ export const fetchPostsAndUsers = async (
   pageNum,
   setPosts,
   setAllPostsLoaded,
-  setLoading
+  setLoading,
+  setLoadingMore // Add setLoadingMore as a parameter
 ) => {
   setLoading(true);
   try {
@@ -36,6 +37,9 @@ export const fetchPostsAndUsers = async (
     console.error("Error fetching data", error);
   } finally {
     setLoading(false);
+    if (typeof setLoadingMore === "function") {
+      setLoadingMore(false); // Set loadingMore to false after fetching posts
+    }
   }
 };
 
