@@ -4,7 +4,6 @@ import Post from "./Post";
 
 const Timeline = () => {
   const [posts, setPosts] = useState([]);
-  const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [allPostsLoaded, setAllPostsLoaded] = useState(false);
@@ -38,7 +37,6 @@ const Timeline = () => {
           setAllPostsLoaded(true);
         } else {
           setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-          setUsers(usersRes.data);
         }
       } catch (error) {
         console.error("Error fetching data", error);
@@ -53,18 +51,17 @@ const Timeline = () => {
     fetchPostsAndUsers(page);
   }, [fetchPostsAndUsers, page]);
 
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-        document.documentElement.offsetHeight ||
-      loading ||
-      allPostsLoaded
-    )
-      return;
-    setPage((prevPage) => prevPage + 1);
-  };
-
   useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        loading ||
+        allPostsLoaded
+      )
+        return;
+      setPage((prevPage) => prevPage + 1);
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, allPostsLoaded]);
@@ -74,8 +71,16 @@ const Timeline = () => {
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
-      {loading && <p className="text-center">Loading more posts...</p>}
-      {allPostsLoaded && <p className="text-center">Thats all for now.</p>}
+      {loading && (
+        <p className="text-center text-gray-700 dark:text-white">
+          Loading more posts...
+        </p>
+      )}
+      {allPostsLoaded && (
+        <p className="text-center text-gray-700 dark:text-white">
+          That's all for now.
+        </p>
+      )}
     </div>
   );
 };
