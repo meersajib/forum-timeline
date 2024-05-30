@@ -65,6 +65,10 @@ const Timeline = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, allPostsLoaded]);
+  console.log(
+    "Post IDs:",
+    posts.map((post) => post.id)
+  );
 
   return (
     <div className="container mx-auto p-4">
