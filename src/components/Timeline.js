@@ -69,7 +69,7 @@ const Timeline = () => {
       {posts.map((post, index) => (
         <Post key={`${post.id}-${post.userId}-${index}`} post={post} />
       ))}
-      {loadingMore && (
+      {!loadingInitial && loadingMore && (
         <div className="flex items-center justify-center gap-4 mt-4">
           <FontAwesomeIcon
             icon={faSpinner}
