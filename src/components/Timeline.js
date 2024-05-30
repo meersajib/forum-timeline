@@ -65,23 +65,19 @@ const Timeline = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, allPostsLoaded]);
-  console.log(
-    "Post IDs:",
-    posts.map((post) => post.id)
-  );
 
   return (
     <div className="container mx-auto p-4">
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
+      {posts.map((post, index) => (
+        <Post key={`${post.id}-${post.userId}-${index}`} post={post} />
       ))}
       {loading && (
-        <p className="text-center text-gray-700 dark:text-white">
+        <p className="text-center text-gray-700 dark:text-gray-300">
           Loading more posts...
         </p>
       )}
       {allPostsLoaded && (
-        <p className="text-center text-gray-700 dark:text-white">
+        <p className="text-center text-gray-700 dark:text-gray-300">
           That's all for now.
         </p>
       )}
