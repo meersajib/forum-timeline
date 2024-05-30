@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { fetchPostsAndUsers } from "../api"; // Adjust the path as needed
 import Post from "./Post";
 
 const Timeline = () => {
@@ -8,48 +8,13 @@ const Timeline = () => {
   const [loading, setLoading] = useState(false);
   const [allPostsLoaded, setAllPostsLoaded] = useState(false);
 
-  const POSTS_PER_PAGE = 12;
-
-  const fetchPostsAndUsers = useCallback(
-    async (pageNum) => {
-      if (allPostsLoaded) return;
-
-      setLoading(true);
-      try {
-        const [postsRes, usersRes] = await Promise.all([
-          axios.get("https://jsonplaceholder.typicode.com/posts"),
-          axios.get("https://jsonplaceholder.typicode.com/users"),
-        ]);
-
-        const postsWithUsers = postsRes.data.map((post) => {
-          return {
-            ...post,
-            user: usersRes.data.find((user) => user.id === post.userId),
-          };
-        });
-
-        const newPosts = postsWithUsers.slice(
-          (pageNum - 1) * POSTS_PER_PAGE,
-          pageNum * POSTS_PER_PAGE
-        );
-
-        if (newPosts.length === 0) {
-          setAllPostsLoaded(true);
-        } else {
-          setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-        }
-      } catch (error) {
-        console.error("Error fetching data", error);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [allPostsLoaded]
-  );
+  const handleFetchPosts = useCallback((pageNum) => {
+    fetchPostsAndUsers(pageNum, setPosts, setAllPostsLoaded, setLoading);
+  }, []);
 
   useEffect(() => {
-    fetchPostsAndUsers(page);
-  }, [fetchPostsAndUsers, page]);
+    handleFetchPosts(page);
+  }, [handleFetchPosts, page]);
 
   useEffect(() => {
     const handleScroll = () => {

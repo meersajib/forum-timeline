@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useCallback } from "react";
+import { fetchCommentsForPost } from "../api"; // Adjust the path as needed
 import Comments from "./Comments";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle, faEnvelope } from "@fortawesome/free-solid-svg-icons";
@@ -8,19 +8,13 @@ const Post = ({ post }) => {
   const [comments, setComments] = useState([]);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
 
-  const toggleComments = async () => {
+  const toggleComments = useCallback(async () => {
     if (!isCommentsVisible) {
-      try {
-        const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/posts/${post.id}/comments`
-        );
-        setComments(response.data);
-      } catch (error) {
-        console.error("Error fetching comments", error);
-      }
+      const fetchedComments = await fetchCommentsForPost(post.id);
+      setComments(fetchedComments);
     }
     setIsCommentsVisible(!isCommentsVisible);
-  };
+  }, [isCommentsVisible, post.id]);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4">
